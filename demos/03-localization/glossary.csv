@@ -1,0 +1,14 @@
+source,es,nota
+event,evento,
+delivery,entrega,
+retry,reintento,no "retry"
+endpoint,endpoint,se mantiene en ingles
+payload,carga util,SOLO si el cliente lo pide; por defecto se mantiene
+status code,codigo de estado,
+timeout,tiempo de espera agotado,no "timeout" en prosa
+exponential backoff,espera exponencial,
+jitter,dispersion aleatoria,no "jitter" en prosa
+exhausted,exhausted,valor literal del API: NO traducir
+replay,reenvio,
+dashboard,panel,
+account owner,titular de la cuenta,

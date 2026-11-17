@@ -1,0 +1,25 @@
+id, customer_name ,email, signup_date , amount ,plan,country
+1, Ana Pérez ,ana.perez@example.com,2024-03-05, 19.99 ,Pro,ES
+2,Bob Smith,bob.smith@EXAMPLE.com,05/03/2024,$19.99,pro,US
+3, Carla Ruiz ,carla.ruiz@example,2024-03-07,"19,99",Pro,ES
+4,daniel  ortega,DANIEL.ORTEGA@Example.COM,2024/03/09,USD 29.00,PRO ,es
+5,Elena Vidal,elena.vidal@example.com,Mar 11 2024,,Pro,Spain
+6,Ana Pérez,ana.perez@example.com,2024-03-05,19.99,Pro,ES
+7,,sin.email@example.com,2024-03-12,9.99,Basic,CL
+8,Felipe Soto,felipe.soto@example.com,13/03/2024,  12.50  ,basic,Chile
+9,Grace Lee,grace.lee@example.com,2024-03-14,49.99,Enterprise,US
+10, Hugo  Marin ,hugo.marin@example.com,2024-03-15,0.00,Free,AR
+11,Iván Peña,ivan.pena@example.com,2024-03-16,19.99,PRO,ES
+12,Jonas Weber,jonas.weber@example.com,16.03.2024,19.99,Pro,DE
+13,Karla Méndez,karla.mendez@example.com,2024-03-17,"$ 25,50",Pro,MX
+14,Liam O'Brien,liam.obrien@example.com,2024-03-18,19.99,pro,IE
+15,María  José Ruiz,maria.jose@example.com,2024-03-19,19.99,Pro,ES
+16,Nina Petrova,nina.petrova@example.com,2024-03-20,-5.00,Pro,BG
+17,Omar Haddad,omar.haddad@example.com,2024-03-21,19.99,PRO,MA
+18,Paula  Gil,paula.gil@example.com,2024-03-22,"19,99",Pro,ES
+19,Quinn Adams,quinn.adams@example.com,2024-13-45,19.99,Pro,US
+20,Rui Costa,rui.costa@example.com,2024-03-24,19.99,Premium,PT
+,,,,,,
+21,Sara Núñez,sara.nunez@example.com,2024-03-25,19.99,Pro,España
+22,Tomás  Bravo,tomas.bravo@example.com,2024-03-26,19.99,pro,CL
+23,Ana Pérez ,ana.perez@example.com,2024-03-05,"$19.99",PRO,ES

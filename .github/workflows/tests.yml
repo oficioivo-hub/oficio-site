@@ -1,0 +1,33 @@
+name: tests
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Pruebas del limpiador de CSV
+        working-directory: demos/01-csv-clean
+        run: python3 -m unittest discover -v
+
+      - name: Limpiador de punta a punta
+        working-directory: demos/01-csv-clean
+        run: python3 clean.py data/messy_sales.csv -o out
+
+      - name: Sintaxis del scraper
+        run: python3 -m py_compile demos/02-scraper/scrape_books.py
+
+      - name: Integridad de la localizacion
+        run: |
+          test -f demos/03-localization/source/webhook-retries.en.md
+          test -f demos/03-localization/es/webhook-retries.es.md
+          test -f demos/03-localization/glossary.csv
