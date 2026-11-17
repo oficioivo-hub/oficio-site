@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" role="img" aria-label="Oficio">
+  <title>Oficio</title>
+  <rect width="32" height="32" fill="#12100d"/>
+  <g transform="translate(3.2 3.2) scale(0.2133)">
+    <path d="M60 8a52 52 0 1 1-36.7 15.2" fill="none" stroke="#d98e4a" stroke-width="11" stroke-linecap="square"/>
+    <rect x="42" y="46" width="36" height="8" fill="#f2ece1"/>
+    <rect x="42" y="60" width="24" height="8" fill="#f2ece1"/>
+    <rect x="42" y="74" width="14" height="8" fill="#d98e4a"/>
+  </g>
+</svg>

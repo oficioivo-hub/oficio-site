@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-label="Oficio">
+  <title>Oficio</title>
+  <path d="M60 8a52 52 0 1 1-36.7 15.2" fill="none" stroke="#d98e4a" stroke-width="9" stroke-linecap="square"/>
+  <rect x="42" y="46" width="36" height="6" fill="#f2ece1"/>
+  <rect x="42" y="58" width="26" height="6" fill="#f2ece1"/>
+  <rect x="42" y="70" width="16" height="6" fill="#d98e4a"/>
+</svg>
