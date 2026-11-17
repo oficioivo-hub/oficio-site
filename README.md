@@ -1,28 +1,33 @@
 # Oficio — small technical work
 
-Sitio público y demos ejecutables de **Oficio**, un taller técnico pequeño:
-limpieza de datos, scrapers y localización técnica.
+Public site and runnable demos for **Oficio**, a small technical workshop: data cleanup,
+scrapers and technical localization.
 
-- **Sitio:** https://oficioivo-hub.github.io/oficio-site/
-- **Contacto:** oficio.ivo@gmail.com
+- **Site:** https://oficioivo-hub.github.io/oficio-site/
+- **Contact:** oficio.ivo@gmail.com
 
 ## Demos
 
-| Carpeta | Qué demuestra | Cómo se comprueba |
+| Folder | What it proves | How to check it |
 |---|---|---|
-| [`demos/01-csv-clean`](demos/01-csv-clean) | CSV sucio → CSV limpio, con descartes trazables | 13 pruebas unitarias + ejecución de punta a punta |
-| [`demos/02-scraper`](demos/02-scraper) | Extractor de 60 líneas, sin dependencias, con rate limit | `python3 scrape_books.py --pages 2` |
-| [`demos/03-localization`](demos/03-localization) | Traducción técnica EN→ES con glosario y QA | Comparación término a término contra el glosario |
+| [`demos/01-csv-clean`](demos/01-csv-clean) | Messy CSV → clean CSV, with traceable rejects | 13 unit tests plus a full end-to-end run |
+| [`demos/02-scraper`](demos/02-scraper) | A 60-line, dependency-free extractor with rate limits | `python3 scrape_books.py --pages 2` |
+| [`demos/03-localization`](demos/03-localization) | EN→ES technical translation with glossary and QA | Term-by-term comparison against the glossary |
 
-## Por qué esto es público
+## Why this is public
 
-Porque una promesa no es una prueba. Cualquiera puede leer el código, ejecutar las
-pruebas y comprobar que funciona antes de contratar nada.
+Because a promise is not proof. Anyone can read the code, run the tests and check that it
+works before hiring anyone.
 
-Todo el código es de biblioteca estándar: sin dependencias, sin `pip install`, sin
-sorpresas.
+All code uses the standard library only: no dependencies, no `pip install`, no surprises.
 
-## Estado
+## Status
 
-Las pruebas corren en cada push (ver la pestaña **Actions**). Si el badge está en verde,
-el código funciona en una máquina limpia, no solo en la mía.
+Tests run locally with:
+
+```bash
+cd demos/01-csv-clean && python3 -m unittest discover -v
+```
+
+No client data, no secrets and no internal strategy live in this repository. The private
+repository holds the ledger and the operations.
