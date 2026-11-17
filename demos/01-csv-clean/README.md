@@ -35,14 +35,14 @@ python3 clean.py data/messy_sales.csv -o out
 ```
 
 ```
-  out/clean.csv  (17 filas)
-  out/rejects.csv  (6 filas)
+  out/clean.csv  (17 rows)
+  out/rejects.csv  (6 rows)
 
-entrada      24
-salida       17
-rechazadas   6  (2 duplicadas, 1 vacias)
-importe      346.87
-paises       AR:1, CL:3, DE:1, ES:6, IE:1, MA:1, MX:1, PT:1, US:2
+rows in      24
+rows out     17
+rejected     6  (2 duplicates, 1 blank)
+total amount 346.87
+countries    AR:1, CL:3, DE:1, ES:6, IE:1, MA:1, MX:1, PT:1, US:2
 ```
 
 ## Tests

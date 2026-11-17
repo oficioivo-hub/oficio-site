@@ -11,10 +11,10 @@ python3 scrape_books.py --pages 2 --out books.csv
 ```
 
 ```
-  pagina 1: 20 libros
-  pagina 2: 20 libros
+  page 1: 20 books
+  page 2: 20 books
 
-40 libros -> books.csv
+40 books -> books.csv
 ```
 
 ## Decisions that matter
