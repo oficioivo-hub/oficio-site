@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Extractor de catalogo de books.toscrape.com (sitio de practica publico).
+"""Catalogue extractor for books.toscrape.com (a public scraping sandbox).
 
-Solo biblioteca estandar. Educado por defecto: 0,6 s entre peticiones,
-User-Agent identificable y limite de paginas explicito.
+Standard library only. Polite by default: 0.6 s between requests, an identifiable
+User-Agent and an explicit page limit.
 
-Uso:
+Usage:
     python3 scrape_books.py --pages 2 --out books.csv
 """
 
@@ -81,7 +81,7 @@ def main() -> int:
         catalogue = CatalogueParser()
         catalogue.feed(html)
         rows.extend(catalogue.books)
-        print(f"  pagina {page}: {len(catalogue.books)} libros")
+        print(f"  page {page}: {len(catalogue.books)} books")
         time.sleep(args.delay)
 
     with open(args.out, "w", newline="", encoding="utf-8") as fh:
@@ -89,7 +89,7 @@ def main() -> int:
         writer.writeheader()
         writer.writerows(rows)
 
-    print(f"\n{len(rows)} libros -> {args.out}")
+    print(f"\n{len(rows)} books -> {args.out}")
     return 0
 
 

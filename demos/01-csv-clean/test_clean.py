@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Pruebas del limpiador. Ejecutar: python3 -m unittest discover -v"""
+"""Tests for the cleaner. Run: python3 -m unittest discover -v"""
 
 import sys
 import unittest
@@ -13,8 +13,8 @@ FIXTURE = Path(__file__).parent / "data" / "messy_sales.csv"
 
 
 class TestParsers(unittest.TestCase):
-    def test_fechas_validas(self):
-        casos = {
+    def test_valid_dates(self):
+        cases = {
             "2024-03-05": "2024-03-05",
             "05/03/2024": "2024-03-05",
             "2024/03/09": "2024-03-09",
@@ -22,18 +22,18 @@ class TestParsers(unittest.TestCase):
             "Mar 11 2024": "2024-03-11",
             "  2024-03-25  ": "2024-03-25",
         }
-        for entrada, esperado in casos.items():
-            with self.subTest(entrada=entrada):
-                self.assertEqual(clean.parse_date(entrada), esperado)
+        for raw, expected in cases.items():
+            with self.subTest(raw=raw):
+                self.assertEqual(clean.parse_date(raw), expected)
 
-    def test_fecha_invalida(self):
-        for entrada in ["", "2024-13-45", "mañana", "31/02/2024"]:
-            with self.subTest(entrada=entrada):
+    def test_invalid_dates(self):
+        for raw in ["", "2024-13-45", "tomorrow", "31/02/2024"]:
+            with self.subTest(raw=raw):
                 with self.assertRaises(ValueError):
-                    clean.parse_date(entrada)
+                    clean.parse_date(raw)
 
-    def test_importes(self):
-        casos = {
+    def test_amounts(self):
+        cases = {
             "19.99": "19.99",
             "$19.99": "19.99",
             " 19.99 ": "19.99",
@@ -43,28 +43,28 @@ class TestParsers(unittest.TestCase):
             "1.234,56": "1234.56",
             "0.00": "0.00",
         }
-        for entrada, esperado in casos.items():
-            with self.subTest(entrada=entrada):
-                self.assertEqual(str(clean.parse_amount(entrada)), esperado)
+        for raw, expected in cases.items():
+            with self.subTest(raw=raw):
+                self.assertEqual(str(clean.parse_amount(raw)), expected)
 
-    def test_importes_invalidos(self):
-        for entrada in ["", "   ", "-5.00", "gratis", "19.99.99"]:
-            with self.subTest(entrada=entrada):
+    def test_invalid_amounts(self):
+        for raw in ["", "   ", "-5.00", "free", "19.99.99"]:
+            with self.subTest(raw=raw):
                 with self.assertRaises(ValueError):
-                    clean.parse_amount(entrada)
+                    clean.parse_amount(raw)
 
     def test_email(self):
         self.assertEqual(clean.parse_email("ANA@Example.COM "), "ana@example.com")
-        for entrada in ["", "carla.ruiz@example", "sin arroba.com", "@example.com"]:
-            with self.subTest(entrada=entrada):
+        for raw in ["", "carla.ruiz@example", "no at sign.com", "@example.com"]:
+            with self.subTest(raw=raw):
                 with self.assertRaises(ValueError):
-                    clean.parse_email(entrada)
+                    clean.parse_email(raw)
 
-    def test_plan_desconocido_no_rompe(self):
+    def test_unknown_plan_does_not_crash(self):
         self.assertEqual(clean.parse_plan("PRO "), "pro")
         self.assertEqual(clean.parse_plan("Premium"), "other")
 
-    def test_pais(self):
+    def test_country(self):
         self.assertEqual(clean.parse_country("España"), "ES")
         self.assertEqual(clean.parse_country("chile"), "CL")
         self.assertEqual(clean.parse_country(""), "??")
@@ -75,30 +75,30 @@ class TestEndToEnd(unittest.TestCase):
         rows = clean.read_csv(FIXTURE)
         self.cleaned, self.rejects, self.report = clean.clean_rows(rows)
 
-    def test_conteos(self):
+    def test_counts(self):
         self.assertEqual(self.report["rows_in"], 24)
         self.assertEqual(self.report["rows_out"], 17)
         self.assertEqual(self.report["rejected"], 6)
         self.assertEqual(self.report["duplicates"], 2)
         self.assertEqual(self.report["blank_rows"], 1)
 
-    def test_importe_total(self):
+    def test_total_amount(self):
         self.assertEqual(self.report["total_amount"], "346.87")
 
-    def test_motivos_por_linea(self):
-        motivos = {r["line"]: r["reason"].split(":")[0] for r in self.rejects}
-        self.assertEqual(motivos[4], "email invalido")
-        self.assertEqual(motivos[6], "importe vacio")
-        self.assertEqual(motivos[7], "duplicado")
-        self.assertEqual(motivos[17], "importe negativo")
-        self.assertEqual(motivos[20], "fecha no reconocida")
-        self.assertEqual(motivos[25], "duplicado")
+    def test_reason_per_line(self):
+        reasons = {r["line"]: r["reason"].split(":")[0] for r in self.rejects}
+        self.assertEqual(reasons[4], "invalid email")
+        self.assertEqual(reasons[6], "empty amount")
+        self.assertEqual(reasons[7], "duplicate")
+        self.assertEqual(reasons[17], "negative amount")
+        self.assertEqual(reasons[20], "unrecognized date")
+        self.assertEqual(reasons[25], "duplicate")
 
-    def test_sin_duplicados(self):
-        claves = [(r["email"], r["signup_date"], r["amount"]) for r in self.cleaned]
-        self.assertEqual(len(claves), len(set(claves)))
+    def test_no_duplicates(self):
+        keys = [(r["email"], r["signup_date"], r["amount"]) for r in self.cleaned]
+        self.assertEqual(len(keys), len(set(keys)))
 
-    def test_invariantes_de_salida(self):
+    def test_output_invariants(self):
         for r in self.cleaned:
             with self.subTest(email=r["email"]):
                 self.assertRegex(r["signup_date"], r"^\d{4}-\d{2}-\d{2}$")
@@ -107,11 +107,11 @@ class TestEndToEnd(unittest.TestCase):
                 self.assertNotIn("  ", r["name"])
                 self.assertRegex(r["country"], r"^[A-Z?]{2}$")
 
-    def test_idempotencia(self):
-        """Limpiar la salida debe dar exactamente lo mismo."""
-        otra_vez, rechazos, _ = clean.clean_rows(self.cleaned)
-        self.assertEqual(otra_vez, self.cleaned)
-        self.assertEqual(rechazos, [])
+    def test_idempotence(self):
+        """Cleaning the output must return exactly the same output."""
+        again, rejects, _ = clean.clean_rows(self.cleaned)
+        self.assertEqual(again, self.cleaned)
+        self.assertEqual(rejects, [])
 
 
 if __name__ == "__main__":

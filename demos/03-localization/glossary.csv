@@ -1,14 +1,14 @@
-source,es,nota
+source_en,target_es,note
 event,evento,
 delivery,entrega,
-retry,reintento,no "retry"
-endpoint,endpoint,se mantiene en ingles
-payload,carga util,SOLO si el cliente lo pide; por defecto se mantiene
-status code,codigo de estado,
-timeout,tiempo de espera agotado,no "timeout" en prosa
+retry,reintento,never "retry"
+endpoint,endpoint,kept in English
+payload,carga útil,only if the client asks; kept by default
+status code,código de estado,
+timeout,tiempo de espera agotado,not "timeout" in prose
 exponential backoff,espera exponencial,
-jitter,dispersion aleatoria,no "jitter" en prosa
-exhausted,exhausted,valor literal del API: NO traducir
-replay,reenvio,
+jitter,dispersión aleatoria,not "jitter" in prose
+exhausted,exhausted,API literal value: do not translate
+replay,reenvío,
 dashboard,panel,
 account owner,titular de la cuenta,

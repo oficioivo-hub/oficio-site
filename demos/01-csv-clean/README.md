@@ -1,35 +1,34 @@
-&#8592; [Volver a Oficio](../../)
+← [Back to Oficio](../../)
 
-# 01 — Limpieza de CSV de clientes
+# 01 — Client CSV cleanup
 
-Un CSV real suele venir con fechas en cuatro formatos, importes con símbolo de moneda,
-nombres con doble espacio, correos en mayúsculas, planes escritos de tres maneras y
-filas duplicadas. Este script lo deja en un formato único y auditable — y dice
-exactamente qué descartó y por qué.
+A real CSV arrives with dates in four formats, currency symbols, double spaces in names,
+uppercase emails, plans written three different ways and duplicate rows. This script turns
+it into one auditable format — and reports exactly what it dropped, and why.
 
-**Sin dependencias.** Solo biblioteca estándar de Python. No hay `pip install`, no hay
-entorno virtual, no hay sorpresas en producción.
+**No dependencies.** Standard library only. No `pip install`, no virtualenv, no surprises
+in production.
 
-## Qué hace
+## What it handles
 
-| Problema en la entrada | Resultado |
+| Problem in the input | Result |
 |---|---|
 | `2024-03-05`, `05/03/2024`, `2024/03/09`, `16.03.2024`, `Mar 11 2024` | `YYYY-MM-DD` |
-| `$19.99`, `19,99`, `USD 29.00`, `$ 25,50`, `1.234,56` | `Decimal` con 2 decimales |
+| `$19.99`, `19,99`, `USD 29.00`, `$ 25,50`, `1.234,56` | `Decimal`, 2 places |
 | `ANA@Example.COM ` | `ana@example.com` |
 | ` PRO `, `pro`, `Pro` | `pro` |
 | `España`, `es`, `ES` | `ES` |
-| Filas duplicadas | eliminadas |
-| Email sin TLD, fecha imposible, importe negativo o vacío | apartadas en `rejects.csv` con motivo y número de línea |
-| Filas en blanco | contadas, no escritas |
+| Duplicate rows | removed |
+| Email without TLD, impossible date, negative or empty amount | moved to `rejects.csv` with a reason and line number |
+| Blank rows | counted, not written |
 
-Garantías que verifican las pruebas:
+## Guarantees the tests enforce
 
-- **Idempotente**: limpiar la salida devuelve exactamente la misma salida.
-- **Trazable**: cada descarte tiene línea y motivo.
-- **Determinista**: mismo input, mismo output, sin red y sin azar.
+- **Idempotent** — cleaning the output returns exactly the same output.
+- **Traceable** — every dropped row has a line number and a reason.
+- **Deterministic** — same input, same output, no network, no randomness.
 
-## Ejecutar
+## Run it
 
 ```bash
 python3 clean.py data/messy_sales.csv -o out
@@ -46,25 +45,24 @@ importe      346.87
 paises       AR:1, CL:3, DE:1, ES:6, IE:1, MA:1, MX:1, PT:1, US:2
 ```
 
-## Pruebas
+## Tests
 
 ```bash
 python3 -m unittest discover -v
 # Ran 13 tests ... OK
 ```
 
-Las pruebas cubren cada parser por separado y el flujo completo contra el fixture:
-conteos, importe total, motivo por línea, ausencia de duplicados, formato de salida e
-idempotencia.
+The suite covers every parser separately and the full flow against the fixture: counts,
+total amount, reason per line, absence of duplicates, output format and idempotence.
 
-## Salida
+## Output
 
-- `out/clean.csv` — registros válidos: `id, name, email, signup_date, amount, plan, country`
+- `out/clean.csv` — valid records: `id, name, email, signup_date, amount, plan, country`
 - `out/rejects.csv` — `line, reason`
-- `out/report.json` — conteos, importe total, desglose por país y plan
+- `out/report.json` — counts, total amount, breakdown by country and plan
 
-## Cuándo esto vale dinero
+## When this is worth money
 
-Cuando alguien tiene 40.000 filas de clientes exportadas de tres sistemas y necesita
-una lista que se pueda importar a su CRM sin que se rompa. Ese trabajo se cobra por
-entrega, no por hora, y se acepta o se rechaza mirando el reporte.
+When someone has 40,000 customer rows exported from three systems and needs a list that
+imports into their CRM without breaking. That job is paid per deliverable, not per hour,
+and it's accepted or rejected by looking at the report.

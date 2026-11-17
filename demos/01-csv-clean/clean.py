@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
-"""Normaliza un CSV de clientes sucio y separa lo irrecuperable.
+"""Normalize a messy customer CSV and separate what cannot be recovered.
 
-Sin dependencias externas: solo biblioteca estandar. Se ejecuta en cualquier
-maquina con Python 3.9+ sin instalar nada.
+No third-party dependencies: standard library only. Runs on any machine with
+Python 3.9+ and nothing installed.
 
-Uso:
+Usage:
     python3 clean.py data/messy_sales.csv -o out
 
-Salida:
-    out/clean.csv    registros validos y deduplicados
-    out/rejects.csv  registros descartados con motivo
-    out/report.json  resumen legible por maquina
+Output:
+    out/clean.csv    valid, de-duplicated records
+    out/rejects.csv  dropped records with the reason
+    out/report.json  machine-readable summary
 """
 
 from __future__ import annotations
@@ -62,26 +62,26 @@ OUTPUT_FIELDS = ["id", "name", "email", "signup_date", "amount", "plan", "countr
 
 
 def norm_ws(value: str) -> str:
-    """Colapsa espacios repetidos y recorta extremos."""
+    """Collapse repeated whitespace and trim the ends."""
     return re.sub(r"\s+", " ", (value or "")).strip()
 
 
 def parse_date(raw: str) -> str:
     text = norm_ws(raw)
     if not text:
-        raise ValueError("fecha vacia")
+        raise ValueError("empty date")
     for fmt in DATE_FORMATS:
         try:
             return datetime.strptime(text, fmt).date().isoformat()
         except ValueError:
             continue
-    raise ValueError(f"fecha no reconocida: {raw!r}")
+    raise ValueError(f"unrecognized date: {raw!r}")
 
 
 def parse_amount(raw: str) -> Decimal:
     text = norm_ws(raw)
     if not text:
-        raise ValueError("importe vacio")
+        raise ValueError("empty amount")
     text = CURRENCY_RE.sub("", text)
     text = text.replace("$", "").replace("€", "").strip()
     if "," in text and "." in text:
@@ -92,18 +92,18 @@ def parse_amount(raw: str) -> Decimal:
     try:
         value = Decimal(text)
     except InvalidOperation as exc:
-        raise ValueError(f"importe no parseable: {raw!r}") from exc
+        raise ValueError(f"unparseable amount: {raw!r}") from exc
     if value < 0:
-        raise ValueError(f"importe negativo: {raw!r}")
+        raise ValueError(f"negative amount: {raw!r}")
     return value.quantize(Decimal("0.01"))
 
 
 def parse_email(raw: str) -> str:
     email = norm_ws(raw).lower()
     if not email:
-        raise ValueError("email vacio")
+        raise ValueError("empty email")
     if not EMAIL_RE.match(email):
-        raise ValueError(f"email invalido: {raw!r}")
+        raise ValueError(f"invalid email: {raw!r}")
     return email
 
 
@@ -120,7 +120,7 @@ def parse_country(raw: str) -> str:
 
 
 def clean_row(row: dict, line: int):
-    """Devuelve (registro_limpio, None) o (None, motivo)."""
+    """Return (clean_record, None) or (None, reason)."""
     try:
         record = {
             "id": norm_ws(row.get("id", "")),
@@ -143,7 +143,7 @@ def clean_rows(rows: list[dict]) -> tuple[list[dict], list[dict], dict]:
     duplicates = 0
     blank = 0
 
-    for index, row in enumerate(rows, start=2):  # 2 = primera fila de datos
+    for index, row in enumerate(rows, start=2):  # 2 = first data row
         if not any(norm_ws(v) for v in row.values()):
             blank += 1
             continue
@@ -156,7 +156,7 @@ def clean_rows(rows: list[dict]) -> tuple[list[dict], list[dict], dict]:
         key = (record["email"], record["signup_date"], record["amount"])
         if key in seen:
             duplicates += 1
-            rejects.append({"line": index, "reason": "duplicado", "raw": dict(row)})
+            rejects.append({"line": index, "reason": "duplicate", "raw": dict(row)})
             continue
         seen.add(key)
         cleaned.append(record)
@@ -191,17 +191,17 @@ def write_csv(path: Path, records: list[dict], fields: list[str]) -> None:
         writer.writeheader()
         for record in records:
             writer.writerow(record)
-    print(f"  {path}  ({len(records)} filas)")
+    print(f"  {path}  ({len(records)} rows)")
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description="Limpia un CSV de clientes.")
+    parser = argparse.ArgumentParser(description="Clean a customer CSV.")
     parser.add_argument("input", type=Path)
     parser.add_argument("-o", "--out", type=Path, default=Path("out"))
     args = parser.parse_args(argv)
 
     if not args.input.exists():
-        print(f"ERROR: no existe {args.input}", file=sys.stderr)
+        print(f"ERROR: {args.input} does not exist", file=sys.stderr)
         return 1
 
     rows = read_csv(args.input)
@@ -214,12 +214,12 @@ def main(argv: list[str] | None = None) -> int:
     )
 
     print()
-    print(f"entrada      {report['rows_in']}")
-    print(f"salida       {report['rows_out']}")
-    print(f"rechazadas   {report['rejected']}  ({report['duplicates']} duplicadas, "
-          f"{report['blank_rows']} vacias)")
-    print(f"importe      {report['total_amount']}")
-    print(f"paises       {', '.join(f'{k}:{v}' for k, v in sorted(report['by_country'].items()))}")
+    print(f"rows in      {report['rows_in']}")
+    print(f"rows out     {report['rows_out']}")
+    print(f"rejected     {report['rejected']}  ({report['duplicates']} duplicates, "
+          f"{report['blank_rows']} blank)")
+    print(f"total amount {report['total_amount']}")
+    print(f"countries    {', '.join(f'{k}:{v}' for k, v in sorted(report['by_country'].items()))}")
     return 0
 
 

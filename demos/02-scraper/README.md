@@ -1,10 +1,10 @@
-&#8592; [Volver a Oficio](../../)
+← [Back to Oficio](../../)
 
-# 02 — Extractor de catálogo (scraper)
+# 02 — Catalogue scraper
 
-Extractor de 60 líneas, sin dependencias, sobre `books.toscrape.com` — un sitio público
-creado específicamente para practicar scraping. No es un objetivo real: es la prueba
-de que sé escribir un extractor limpio y educado.
+A 60-line, dependency-free scraper for `books.toscrape.com` — a public site built
+specifically for scraping practice. It is not a real target: it's the proof that the
+extractor is clean and polite.
 
 ```bash
 python3 scrape_books.py --pages 2 --out books.csv
@@ -17,28 +17,28 @@ python3 scrape_books.py --pages 2 --out books.csv
 40 libros -> books.csv
 ```
 
-## Decisiones que importan
+## Decisions that matter
 
-- **`HTMLParser` de la biblioteca estándar, no regex.** El HTML cambia; las regex se
-  rompen en silencio. Un parser falla de forma visible.
-- **User-Agent identificable** con correo de contacto. Si el dueño del sitio quiere
-  bloquearme o avisarme, puede.
-- **0,6 s entre peticiones** por defecto, configurable. Un extractor que martillea un
-  servidor es un extractor que consigue que lo bloqueen.
-- **Límite de páginas explícito.** Nunca "todas" por defecto.
-- **Timeout de 15 s** y salida a CSV con cabecera.
+- **`HTMLParser` from the standard library, not regex.** HTML changes; regexes break
+  silently. A parser fails visibly.
+- **Identifiable User-Agent** with a contact address. If the site owner wants to block me
+  or warn me, they can.
+- **0.6 s between requests** by default, configurable. A scraper that hammers a server is
+  a scraper that gets blocked.
+- **Explicit page limit.** Never "all" by default.
+- **15 s timeout** and CSV output with a header row.
 
-## Lo que este script no hace (a propósito)
+## What this script does not do, on purpose
 
-- No rota proxies ni User-Agents para evadir bloqueos.
-- No ignora `robots.txt`.
-- No extrae datos personales.
-- No scrapea sitios cuyo ToS lo prohíbe.
+- No proxy or User-Agent rotation to evade blocks.
+- No ignoring `robots.txt`.
+- No personal data extraction.
+- No scraping of sites whose ToS forbids it.
 
-Esa lista es la razón por la que un cliente puede contratarme sin revisar el contrato
-con un abogado. El scraping legítimo es una herramienta; el resto es un pasivo.
+That list is why a client can hire the workshop without a lawyer reading the contract.
+Legitimate scraping is a tool; the rest is a liability.
 
-## Cuándo esto vale dinero
+## When this is worth money
 
-Cuando alguien necesita un catálogo de 5.000 referencias que solo existe en una web sin
-API, actualizado cada lunes. Se entrega como script + cron + CSV, y se cobra por entrega.
+When someone needs a 5,000-item catalogue that only exists on a website with no API,
+refreshed every Monday. Delivered as a script plus a schedule, paid per deliverable.
