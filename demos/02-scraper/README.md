@@ -1,3 +1,5 @@
+[← Volver a Oficio](/)
+
 # 02 — Extractor de catálogo (scraper)
 
 Extractor de 60 líneas, sin dependencias, sobre `books.toscrape.com` — un sitio público

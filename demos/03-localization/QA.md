@@ -1,3 +1,5 @@
+[← Volver a Oficio](/)
+
 # QA de localización — lista de verificación
 
 Antes de entregar una traducción, se comprueba todo esto. Sin excepciones.
