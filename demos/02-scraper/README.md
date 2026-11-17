@@ -1,4 +1,4 @@
-[← Volver a Oficio](/)
+&#8592; [Volver a Oficio](../../)
 
 # 02 — Extractor de catálogo (scraper)
 

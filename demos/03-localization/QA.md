@@ -1,4 +1,4 @@
-[← Volver a Oficio](/)
+&#8592; [Volver a Oficio](../../)
 
 # QA de localización — lista de verificación
 
